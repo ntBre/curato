@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+
+<p>Molecules in dataset: {{ds_size}}</p>
+
+<form action="/reset-dataset" method="post">
+  <input type="submit" value="Reset dataset">
+</form>
+
+<form action="/preview-dataset">
+  <input type="submit" value="Preview dataset">
+</form>
+
+<form action="/export-dataset" method="post">
+  <input type="text" id="filename" name="filename" value="dataset.smi">
+  <input type="submit" value="Export dataset">
+</form>
+
+<table>
+  <tr>
+	<th>Parameter</th>
+	<th>Molecules</th>
+	<th>Dataset</th>
+  </tr>
+  {% for pid in parameter_ids %}
+  <tr>
+	<td><a href="param/{{pid}}">{{pid}}</a></td>
+	<td>{{molecule_counts[loop.index0]}}</td>
+	<td>{{pid_counts[loop.index0]}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

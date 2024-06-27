@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script type="text/javascript" src="/js/param.js"></script>
+<script type="text/javascript" src="/js/cluster.js"></script>
+{% endblock %}
+
+{% block content %}
+<a href="/">Home</a>
+
+<h3>{{pid}} - {{smarts}}</h3>
+
+<form action="/cluster/{{pid}}">
+  <label for="eps">Epsilon</label>
+  <input type="number" id="eps" name="eps" value="{{eps}}"
+		 max="1.0" min="0.0" step="0.01"><br><br>
+  <label for="min_pts">Min points:</label>
+  <input type="number" id="min_pts" name="min_pts"
+		 value="{{min_pts}}"><br><br>
+  <input type="submit" value="Cluster">
+</form>
+
+<p>
+{{nfps}} molecules, {{max + 1}} clusters, {{noise}} noise points, pruned {{max + 1 -
+clusters|length}} empty clusters, after {{elapsed}}
+</p>
+
+{% for c in clusters %}
+	<h1>Cluster {{loop.index}}, {{c|length}} molecules</h1>
+	{% set idx = c[0] %}
+	{% set mol = mols[idx] %}
+	{% set svgs, hl_atoms = make_svg(pid, map, mol_map, mol) %}
+	{% for svg in svgs %}
+	<span pid="{{pid}}" natoms="{{mol.GetNumAtoms()}}"
+		  smiles="{{mol_to_smiles(mol, mapped=True)}}"
+		  hl_atoms="{{list(hl_atoms[loop.index0])}}">
+	  {{svg|safe}}
+	</span>
+	{% endfor %}
+	<hr>
+	{% set smallest = find_smallest(mols, c) %}
+	{% if smallest != 0 %}
+		{% set small_idx = c[smallest] %}
+		{% set small_mol = mols[small_idx] %}
+	{% set svgs, hl_atoms = make_svg(pid, map, mol_map, small_mol) %}
+	{% for svg in svgs %}
+	<span pid="{{pid}}" natoms="{{small_mol.GetNumAtoms()}}"
+		  smiles="{{mol_to_smiles(small_mol, mapped=True)}}"
+		  hl_atoms="{{list(hl_atoms[loop.index0])}}">
+		{{svg|safe}}
+		</span>
+		{% endfor %}
+	{% endif %}
+{% endfor %}
+
+{% include "modals.html" %}
+
+{% endblock %}

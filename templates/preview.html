@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script type="text/javascript" src="/js/param.js"></script>
+{% endblock %}
+
+{% block content %}
+<p><a href="/">Home</a></p>
+
+{% for m in mols %}
+{% set mol_index = loop.index0 %}
+{{pids[mol_index]}}
+{% for svg in m.svgs %}
+<span id="{{ids[mol_index]}}" natoms="{{m.natoms}}" smiles="{{m.smiles}}"
+	  hl_atoms="{{m.hl_atoms[loop.index0]}}">
+  {{svg|safe}}
+</span>
+{% endfor %}
+{% endfor %}
+
+{% endblock %}
