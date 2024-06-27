@@ -43,10 +43,7 @@ env.globals["find_smallest"] = find_smallest
 env.globals["mol_to_smiles"] = mol_to_smiles
 env.globals["list"] = list
 dbname = "store.sqlite"
-ffname = (
-    "../../01_generate-forcefield/output/"
-    "initial-force-field-openff-2.1.0.offxml"
-)
+ffname = "openff-2.1.0.offxml"
 off = ForceField(ffname)
 pid_to_smarts = {
     p.id: p.smirks
