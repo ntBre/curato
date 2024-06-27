@@ -41,7 +41,7 @@ def test_find_matches():
 
 
 def test_load_want():
-    got = len(load_want("want.params"))
+    got = len(load_want("testfiles/want.params"))
     want = 62
     assert got == want
 
@@ -112,10 +112,7 @@ def test_mapping_debug():
         "[H:17])([H:14])[H:15])([H:11])([H:12])[H:13]"
     )
     mol = Molecule.from_mapped_smiles(smiles)
-    ff = ForceField(
-        "../../01_generate-forcefield/output/"
-        "initial-force-field-openff-2.1.0.offxml"
-    )
+    ff = ForceField("openff-2.1.0.offxml")
     want = list(
         (k, v.id)
         for k, v in sorted(
