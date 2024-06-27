@@ -13,7 +13,6 @@ from openff.toolkit import ForceField
 from rdkit import Chem
 from rdkit.Chem.Draw import rdDepictor, rdMolDraw2D
 
-from parse import tanimoto
 from query import PTABLE, find_matches, into_params, mol_from_smiles
 from store import Store
 from utils import (
@@ -23,6 +22,7 @@ from utils import (
     mol_to_smiles,
     mol_to_svg,
     openff_clean,
+    tanimoto,
 )
 
 warnings.filterwarnings("ignore")

@@ -1,5 +1,5 @@
 import numpy as np
-from rdkit import Chem
+from rdkit import Chem, DataStructs
 from rdkit.Chem.Draw import MolsToGridImage, rdDepictor, rdMolDraw2D
 
 
@@ -159,3 +159,17 @@ def into_params(ff) -> list[tuple[str, Chem.Mol]]:
         (p.id, Chem.MolFromSmarts(p.smirks))
         for p in ff.get_parameter_handler("ProperTorsions").parameters
     ]
+
+
+def tanimoto(fps):
+    "Compute the tanimoto distance matrix for a list of fingerprints"
+    n = len(fps)
+    ret = np.zeros((n, n))
+    for row in range(n):
+        ret[row, row:] = np.array(
+            DataStructs.BulkTanimotoSimilarity(
+                fps[row], fps[row:], returnDistance=True
+            )
+        )
+
+    return ret + ret.T  # copy upper triangle to lower, diag is already zero
