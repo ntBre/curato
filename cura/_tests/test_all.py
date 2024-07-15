@@ -1,6 +1,6 @@
 import tempfile
 
-from cura.query import load_want
+from cura.query import _main, load_want
 from cura.store import (
     DBMol,
     Store,
@@ -67,8 +67,6 @@ def test_store():
 
 
 def test_query():
-    from cura.query import _main
-
     ffname = "openff-2.1.0.offxml"
     with tempfile.NamedTemporaryFile() as f:
         s = Store(f.name)
