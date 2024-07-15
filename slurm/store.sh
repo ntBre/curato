@@ -16,4 +16,4 @@ source $HOME/.bashrc
 
 conda activate fb-196-qcnew
 
-python store.py -n $SLURM_CPUS_PER_TASK
+python store.py -n $SLURM_CPUS_PER_TASK chembl_33_chemreps.txt

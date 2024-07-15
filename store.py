@@ -314,7 +314,7 @@ class Store:
         self.cur.execute("DELETE FROM dataset")
         self.con.commit()
 
-    def process_line(line) -> tuple[list[DBMol], list[DBMol]]:
+    def process_chembl_line(line) -> tuple[list[DBMol], list[DBMol]]:
         "Returns a list of fragments and a list of whole molecules"
         [_chembl_id, cmiles, _inchi, _inchikey] = line.split("\t")
         all_smiles = cmiles.split(".")
@@ -337,11 +337,52 @@ class Store:
         with open(filename) as inp, Pool(processes=self.nprocs) as pool:
             for frags, mols in tqdm(
                 pool.imap_unordered(
-                    Store.process_line,
+                    Store.process_chembl_line,
                     (line for i, line in enumerate(inp) if i > 0),
                     chunksize=32,
                 ),
                 total=2372675,
+            ):
+                if frags:
+                    for frag in frags:
+                        frag.tag = filename
+                    self.insert_fragments(frags)
+                    self.insert_molecules(mols)
+
+    def process_line(line: str) -> tuple[list[DBMol], list[DBMol]]:
+        "Returns a list of fragments and a list of whole molecules"
+        cmiles = line.strip()
+        all_smiles = cmiles.split(".")
+        frags = list()
+        mols = list()
+        for smiles in all_smiles:
+            try:
+                rdmol = mol_from_smiles(smiles)
+            except Exception as e:
+                print(f"failed to build rdmol with: `{e}`")
+                continue
+            if Descriptors.NumRadicalElectrons(rdmol) > 0:
+                continue
+            mols.append(DBMol.from_rdmol(rdmol, fragment=False))
+            if x := xff(rdmol):
+                frags.extend(x)
+        return frags, mols
+
+    def load_smiles(
+        self, filename, chunksize=32, total=None
+    ) -> dict[str, Molecule]:
+        """Load a sequence of SMILES from ``filename``. ``chunksize`` is passed
+        to ``multiprocessing.Pool.imap_unordered``. See its documentation for
+        details. If provided, use ``total`` for the ``tqdm.tqdm`` progress bar.
+        """
+        with open(filename) as inp, Pool(processes=self.nprocs) as pool:
+            for frags, mols in tqdm(
+                pool.imap_unordered(
+                    Store.process_line,
+                    (line for i, line in enumerate(inp) if i > 0),
+                    chunksize=chunksize,
+                ),
+                total=total,
             ):
                 if frags:
                     for frag in frags:
@@ -407,10 +448,11 @@ def bits_to_elements(bits: int) -> list[int]:
 
 
 @click.command()
+@click.argument("filename")
 @click.option("--nprocs", "-n", type=int, default=8)
-def main(nprocs):
+def main(filename, nprocs):
     store = Store(nprocs=nprocs)
-    store.load_chembl("chembl_33_chemreps.txt")
+    store.load_smiles(filename)
 
 
 if __name__ == "__main__":
