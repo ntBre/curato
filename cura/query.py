@@ -8,8 +8,8 @@ from numpy import loadtxt
 from openff.toolkit import ForceField
 from tqdm import tqdm
 
-from store import DBForceField, DBMol, Match, Store, elements_to_bits
-from utils import find_matches, into_params, mol_from_smiles
+from cura.store import DBForceField, DBMol, Match, Store, elements_to_bits
+from cura.utils import find_matches, into_params, mol_from_smiles
 
 logger = logging.getLogger(__name__)
 

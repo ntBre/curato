@@ -8,9 +8,9 @@ from itertools import combinations
 import networkx as nx
 from rdkit import Chem
 
-from base import BaseMixin
-from base_fragment import BaseFragment
-from fun_group_table import bigring_bond_score
+from cura.base import BaseMixin
+from cura.base_fragment import BaseFragment
+from cura.fun_group_table import bigring_bond_score
 
 
 class Compound(BaseMixin):
@@ -140,7 +140,8 @@ class Compound(BaseMixin):
         return new_rdmol, big_rings
 
     def findRings(self):
-        """Find all rings in the molecule and classify them into rings and big rings (>= 10 member)"""
+        """Find all rings in the molecule and classify them into rings and big
+        rings (>= 10 member)"""
         big_rings, rings = [], []
         smallest_rings = list(self.findSmallestRings())
         if len(smallest_rings) == 0:

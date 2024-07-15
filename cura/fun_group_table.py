@@ -3,7 +3,7 @@
 """define functional groups and their scores"""
 from __future__ import absolute_import
 
-from base_fragment import BaseAtom, BaseBond, BaseFragment
+from cura.base_fragment import BaseAtom, BaseBond, BaseFragment
 
 # degree 1
 basefrag0 = BaseFragment([BaseAtom("C", 0, score=0)], [])

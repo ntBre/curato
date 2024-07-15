@@ -10,8 +10,8 @@ from rdkit import Chem
 from rdkit.Chem import Descriptors
 from tqdm import tqdm
 
-from cut_compound import Compound
-from utils import mol_from_smiles
+from cura.cut_compound import Compound
+from cura.utils import mol_from_smiles
 
 
 class DBMol:

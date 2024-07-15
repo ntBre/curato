@@ -1,24 +1,23 @@
 import tempfile
 
-from openff.toolkit import ForceField, Molecule, RDKitToolkitWrapper
-from openff.toolkit.utils import ToolkitRegistry, toolkit_registry_manager
-from rdkit import Chem
-
-from query import load_want
-from store import (
+from cura.query import load_want
+from cura.store import (
     DBMol,
     Store,
     bits_to_elements,
     elements_to_bits,
     get_elements,
 )
-from utils import (
+from cura.utils import (
     find_matches,
     into_params,
     mol_from_mapped_smiles,
     mol_from_smiles,
     mol_to_smiles,
 )
+from openff.toolkit import ForceField, Molecule, RDKitToolkitWrapper
+from openff.toolkit.utils import ToolkitRegistry, toolkit_registry_manager
+from rdkit import Chem
 
 
 def test_find_matches():
@@ -68,7 +67,7 @@ def test_store():
 
 
 def test_query():
-    from query import _main
+    from cura.query import _main
 
     ffname = "openff-2.1.0.offxml"
     with tempfile.NamedTemporaryFile() as f:
