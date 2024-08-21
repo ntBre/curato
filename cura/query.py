@@ -90,7 +90,9 @@ def parse_filters(filters: list[str]) -> list[Filter]:
     return ret
 
 
-def inner(pair: tuple[DBMol, bool], params, filters) -> tuple[str, set[str]]:
+def inner(
+    pair: tuple[DBMol, bool], params, filters
+) -> tuple[str, set[str], bool]:
     "Returns a SMILES and its matching parameter IDs"
     m, is_frag = pair
     if not all((f.apply(m) for f in filters)):
