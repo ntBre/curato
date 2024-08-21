@@ -1,6 +1,11 @@
 # conceptually identical to query but loads and searches for a a sequence of
 # SMIRKS: name pairs instead of a sequence of parameter IDs tied to a force
 # field
+#
+# really, the current query is a specialization of this pattern rather than the
+# other way around, so this should probably serve as the base code for
+# querying, with extracting both "names" (pids) and smirks from a single force
+# field being a special case of the more general behavior here
 
 import itertools
 import logging
