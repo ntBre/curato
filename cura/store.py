@@ -387,6 +387,8 @@ class Store:
                 if frags:
                     for frag in frags:
                         frag.tag = filename
+                    for mol in mols:
+                        mol.tag = filename
                     self.insert_fragments(frags)
                     self.insert_molecules(mols)
 
