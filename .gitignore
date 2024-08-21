@@ -1,2 +1,3 @@
 __pycache__/
 /cura.egg-info/
+/store.sqlite
