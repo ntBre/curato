@@ -384,7 +384,7 @@ class Store:
             for frags, mols in tqdm(
                 pool.imap_unordered(
                     Store.process_line,
-                    (line for i, line in enumerate(inp) if i > 0),
+                    (line for line in inp),
                     chunksize=chunksize,
                 ),
                 total=total,
