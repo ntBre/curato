@@ -389,6 +389,7 @@ class Store:
                 ),
                 total=total,
                 miniters=1,
+                desc="Loading SMILES",
             ):
                 if frags:
                     for frag in frags:
