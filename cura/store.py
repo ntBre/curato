@@ -1,3 +1,4 @@
+import logging
 import pickle
 import sqlite3
 from itertools import chain
@@ -12,6 +13,9 @@ from tqdm import tqdm
 
 from cura.cut_compound import Compound
 from cura.utils import mol_from_smiles
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class DBMol:
@@ -375,6 +379,7 @@ class Store:
         to ``multiprocessing.Pool.imap_unordered``. See its documentation for
         details. If provided, use ``total`` for the ``tqdm.tqdm`` progress bar.
         """
+        logger.info(f"loading smiles from {filename}")
         with open(filename) as inp, Pool(processes=self.nprocs) as pool:
             for frags, mols in tqdm(
                 pool.imap_unordered(
@@ -388,10 +393,11 @@ class Store:
                 if frags:
                     for frag in frags:
                         frag.tag = filename
-                    for mol in mols:
-                        mol.tag = filename
                     self.insert_fragments(frags)
-                    self.insert_molecules(mols)
+                for mol in mols:
+                    mol.tag = filename
+                logger.info(f"inserting {len(mols)} mols")
+                self.insert_molecules(mols)
 
 
 def find_frag_bonds(rdmol, keep_atoms):
@@ -455,6 +461,9 @@ def bits_to_elements(bits: int) -> list[int]:
 @click.option("--nprocs", "-n", type=int, default=8)
 @click.option("--total", "-t", type=int, default=None)
 def main(filename, nprocs, total):
+    logger.info(
+        f"initializing store with {nprocs} procs and {total} total jobs"
+    )
     store = Store(nprocs=nprocs)
     store.load_smiles(filename, total)
 
