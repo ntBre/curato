@@ -383,6 +383,7 @@ class Store:
                     chunksize=chunksize,
                 ),
                 total=total,
+                miniters=1,
             ):
                 if frags:
                     for frag in frags:
