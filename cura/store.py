@@ -376,14 +376,13 @@ class Store:
         details. If provided, use ``total`` for the ``tqdm.tqdm`` progress bar.
         """
         with open(filename) as inp, Pool(processes=self.nprocs) as pool:
-            for frags, mols in pool.imap_unordered(
-                Store.process_line,
-                (
-                    line
-                    for i, line in tqdm(enumerate(inp), total=total)
-                    if i > 0
+            for frags, mols in tqdm(
+                pool.imap_unordered(
+                    Store.process_line,
+                    (line for i, line in enumerate(inp) if i > 0),
+                    chunksize=chunksize,
                 ),
-                chunksize=chunksize,
+                total=total,
             ):
                 if frags:
                     for frag in frags:
