@@ -452,9 +452,10 @@ def bits_to_elements(bits: int) -> list[int]:
 @click.command()
 @click.argument("filename")
 @click.option("--nprocs", "-n", type=int, default=8)
-def main(filename, nprocs):
+@click.option("--total", "-t", type=int, default=None)
+def main(filename, nprocs, total):
     store = Store(nprocs=nprocs)
-    store.load_smiles(filename)
+    store.load_smiles(filename, total)
 
 
 if __name__ == "__main__":
