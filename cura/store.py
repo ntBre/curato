@@ -397,7 +397,6 @@ class Store:
                     self.insert_fragments(frags)
                 for mol in mols:
                     mol.tag = filename
-                logger.info(f"inserting {len(mols)} mols")
                 self.insert_molecules(mols)
 
 
@@ -466,7 +465,7 @@ def main(filename, nprocs, total):
         f"initializing store with {nprocs} procs and {total} total jobs"
     )
     store = Store(nprocs=nprocs)
-    store.load_smiles(filename, total)
+    store.load_smiles(filename, chunksize=32, total=total)
 
 
 if __name__ == "__main__":
