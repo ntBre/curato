@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 import time
 import warnings
@@ -43,7 +44,7 @@ env.globals["find_smallest"] = find_smallest
 env.globals["mol_to_smiles"] = mol_to_smiles
 env.globals["list"] = list
 dbname = "store.sqlite"
-ffname = "openff-2.1.0.offxml"
+ffname = os.environ.get("FF", "openff-2.1.0.offxml")
 off = ForceField(ffname)
 pid_to_smarts = {
     p.id: p.smirks
