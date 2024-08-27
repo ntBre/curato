@@ -202,11 +202,6 @@ def dbscan(dist, eps, min_pts):
 
 def make_cluster_report(ffname, mols, eps, min_pts) -> Report:
     MORGAN_RADIUS = 4
-    map = {
-        p.id: p.smirks
-        for p in off.get_parameter_handler("ProperTorsions").parameters
-    }
-    mol_map = into_params(off)
     fps = make_fps(mols, MORGAN_RADIUS)
     nfps = len(fps)
     dist = tanimoto(fps)
@@ -231,7 +226,7 @@ def make_cluster_report(ffname, mols, eps, min_pts) -> Report:
         noise=noise_pts,
         clusters=clusters,
         mols=mols,
-        map=map,
+        map=pid_to_smarts,
         mol_map=mol_map,
     )
 
