@@ -8,7 +8,7 @@ from http import HTTPStatus
 
 import numpy as np
 from flask import Flask, redirect, request, send_from_directory, url_for
-from jinja2 import Environment, PackageLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from openff.toolkit import ForceField
 from rdkit import Chem
 from rdkit.Chem.Draw import rdDepictor, rdMolDraw2D
@@ -35,7 +35,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 app = Flask("serve")
 env = Environment(
-    loader=PackageLoader("serve"), autoescape=select_autoescape()
+    loader=FileSystemLoader("templates"), autoescape=select_autoescape()
 )
 env.globals["Chem"] = Chem
 env.globals["make_svg"] = make_svg
