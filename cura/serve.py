@@ -12,6 +12,7 @@ from flask import Flask, redirect, request, send_from_directory, url_for
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from openff.toolkit import ForceField
 from rdkit import Chem
+from rdkit.Chem import AllChem
 from rdkit.Chem.Draw import rdDepictor, rdMolDraw2D
 
 from query import PTABLE, find_matches, into_params, mol_from_smiles
@@ -209,7 +210,7 @@ class Report:
 
 
 def make_fps(mols: list[Chem.Mol], radius: int):
-    fpgen = Chem.AllChem.GetMorganGenerator(radius=radius)
+    fpgen = AllChem.GetMorganGenerator(radius=radius)
     return [fpgen.GetFingerprint(mol) for mol in mols]
 
 
