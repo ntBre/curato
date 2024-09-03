@@ -44,22 +44,40 @@ env.globals["find_smallest"] = find_smallest
 env.globals["mol_to_smiles"] = mol_to_smiles
 env.globals["list"] = list
 dbname = "store.sqlite"
+
 ffname = os.environ.get("FF", "openff-2.1.0.offxml")
-off = ForceField(ffname)
-pid_to_smarts = {
-    p.id: p.smirks
-    for p in off.get_parameter_handler("ProperTorsions").parameters
-}
-mol_map = into_params(off)
+_, ext = os.path.splitext(ffname)
+if ext == ".offxml":
+    off = ForceField(ffname)
+    pid_to_smarts = {
+        p.id: p.smirks
+        for p in off.get_parameter_handler("ProperTorsions").parameters
+    }
+    mol_map = into_params(off)
+else:
+    pid_to_smarts = dict()
+    mol_map = list()
+    with open(ffname) as inp:
+        for line in inp:
+            smarts, label = line.split()
+            pid_to_smarts[label] = smarts
+            mol_map.append((label, Chem.MolFromSmarts(smarts)))
 
 
 PID_RE = re.compile("(t)([0-9]+)(.*)")
 
 
 def pid_sort(pid: str) -> tuple[str, int, str | None]:
-    "Return the fields of a ProperTorsion parameter ID as a tuple for sorting"
-    t, n, tail = PID_RE.match(pid).groups()
-    return (t, int(n), tail)
+    """Return the fields of a ProperTorsion parameter ID as a tuple for
+    sorting.
+
+    If pid doesn't match PID_RE, just return the string itself as the sort
+    key.
+    """
+    if m := PID_RE.match(pid):
+        t, n, tail = m.groups()
+        return (t, int(n), tail)
+    return pid
 
 
 @app.route("/js/<path:name>")
