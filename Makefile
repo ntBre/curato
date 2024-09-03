@@ -11,4 +11,4 @@ install:
 	pip install -e .
 
 serve:
-	flask --app serve.py run --debug
+	flask --app cura/serve.py run --debug
