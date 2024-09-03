@@ -3,3 +3,4 @@ __pycache__/
 /store.sqlite
 *.sqlite
 /.backups/
+/input/
