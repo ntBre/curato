@@ -1,0 +1,7 @@
+svg {
+	border:1px solid transparent;
+}
+
+svg:hover {
+	border:1px solid black;
+}

@@ -64,12 +64,12 @@ def pid_sort(pid: str) -> tuple[str, int, str | None]:
 
 @app.route("/js/<path:name>")
 def js(name):
-    return send_from_directory("js", name)
+    return send_from_directory("../js", name)
 
 
 @app.route("/css/<path:name>")
 def css(name):
-    return send_from_directory("css", name)
+    return send_from_directory("../css", name)
 
 
 @app.route("/")
