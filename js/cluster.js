@@ -2,6 +2,7 @@ async function addToDataset() {
 	let node = document.getElementById("modal-box-content");
 	let smiles = node.getAttribute("smiles");
 	let pid = node.getAttribute("pid");
+	let hl_atoms = node.getAttribute("hl_atoms");
 	if (smiles) {
 		let response = await fetch("/add-molecule", {
 			method: "POST",
@@ -11,7 +12,8 @@ async function addToDataset() {
 			},
 			body: JSON.stringify({
 				"smiles": smiles,
-				"pid": pid
+				"pid": pid,
+				"hl_atoms": hl_atoms
 			}),
 		});
 		if (!response.ok) {

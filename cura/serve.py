@@ -185,6 +185,7 @@ def mol_to_draw(mol, pid, natoms, atoms=None):
         # here, I convert these original indices (now captured in the mapped
         # smiles) to indices in the current molecule
         map_to_id = {a.GetAtomMapNum(): a.GetIdx() for a in mol.GetAtoms()}
+        atoms = eval(''.join(atoms))
         atoms = tuple([map_to_id[a + 1] for a in atoms])
         if atoms[0] > atoms[-1]:
             atoms = atoms[::-1]
@@ -471,6 +472,10 @@ def export_dataset():
     table = Store.quick()
     with open(filename, "w") as out:
         for _id, smiles, pid, hl_atoms in table.get_dataset_entries():
+            # fixing json fail from js where str was converted to tuple of
+            # characters
+            hl_atoms: str = "".join(list(hl_atoms))
+            hl_atoms: tuple[int] = tuple(eval(hl_atoms))
             print(pid, smiles, hl_atoms, file=out)
     return redirect(url_for("index"))
 

@@ -8,6 +8,7 @@ function main() {
 			let smiles = svg.getAttribute("smiles");
 			let natoms = svg.getAttribute("natoms");
 			let pid = svg.getAttribute("pid");
+			let hl_atoms = svg.getAttribute("hl_atoms");
 
 			// get the dialog box initially in the page
 			let dialog = document.getElementById("modal-box");
@@ -27,6 +28,9 @@ function main() {
 				n.appendChild(document.createTextNode(natoms + " atoms"));
 				frame.setAttribute("natoms", natoms);
 				frame.appendChild(n);
+			}
+			if (hl_atoms) {
+				frame.setAttribute("hl_atoms", hl_atoms);
 			}
 			if (pid) {
 				frame.setAttribute("pid", pid);
