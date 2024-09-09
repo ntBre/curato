@@ -135,6 +135,13 @@ def param(pid):
     MAX_DRAW = 50
     max_draw = int(request.args.get("max", MAX_DRAW))
     table = Store.quick()
+    # TODO it would be very nice to retrieve and convert only the requested
+    # number of molecules from the database, but that looks trickier than I
+    # expected. I could pass MAX_DRAW here, but it then has to propagate to
+    # Store.get_smiles_matching, which I think would require a different
+    # representation of matches in the database to operate more quickly in SQL.
+    # The dream is something like SELECT smiles from matches where name =
+    # ffname order by natoms limit MAX_DRAW;
     mols = get_smiles_list(table, ffname, pid)
 
     draw_mols = mols_to_draw(mols, pid, mol_map, max_draw)
