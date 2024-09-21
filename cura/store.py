@@ -53,6 +53,9 @@ class DBMol:
             inchikey=inchi,
         )
 
+    def to_rdkit(self) -> Chem.Mol:
+        return mol_from_smiles(self.smiles)
+
     def get_elements(self) -> list[int]:
         "Return `self.elements` as a list of atomic numbers"
         return bits_to_elements(self.elements)
